@@ -1,0 +1,78 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Andalusia Tourism Situation Surveys API
+  description: API for andalusia tourism information 
+
+paths:
+  /api/v1/tourism_stats:
+    x-router-controller: tourismController
+    get:
+      description: Returns all tourism_stats
+      operationId: getTourism_stats
+      responses:
+        200:
+          description: Tourism_stat list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tourism_stat'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /api/v1/tourism_stats/{year}:
+    x-router-controller: tourismController
+    get:
+      description: Returns a single tourism_stat by its year
+      operationId: findByyear
+      parameters:
+        - required: true
+          name: year
+          description: year of the tourism_stat to fetch
+          in: path
+          schema:
+            type: number
+      responses:
+        200:
+          description: Tourism_stat found by year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tourism_stat'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    tourism_stat:
+        type: object
+        required:
+          - year
+        properties:
+          province:
+            type: string
+          year:
+            type: number
+          tourist:
+            type: number
+          average_daily_expenditure:
+            type: number
+          average_stay:
+            type: number
+    error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+      additionalProperties: true
